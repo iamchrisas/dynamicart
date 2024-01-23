@@ -49,6 +49,13 @@ const users = [
   },
 ];
 
+
+/*Seeding users and posts, then add comments manually to test that 
+they get successfuly added to the posts
+my seeds don't work because I only have post methods, and not update methods
+to show the comments related to the posts*/
+
+
 let userIds;
 let postIds;
 

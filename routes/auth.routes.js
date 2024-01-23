@@ -56,11 +56,7 @@ router.post("/signup", isLoggedOut, async (req, res, next) => {
     // After creating the user, check if they uploaded an artwork
     if (req.body.artwork) {
       await User.findByIdAndUpdate(user._id, { role: "artist" });
-    } else {
-      res.redirect("/auth/login");
-    }
-
-    res.redirect("/auth/login");
+    } res.redirect("/auth/login");
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
       res.status(500).render("auth/signup", { errorMessage: error.message });
