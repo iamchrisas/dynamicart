@@ -42,19 +42,6 @@ router.post("/signup", isLoggedOut, (req, res) => {
     return;
   }
 
-  //   ! This regular expression checks password for special characters and minimum length
-  /*
-  const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
-  if (!regex.test(password)) {
-    res
-      .status(400)
-      .render("auth/signup", {
-        errorMessage: "Password needs to have at least 6 chars and must contain at least one number, one lowercase and one uppercase letter."
-    });
-    return;
-  }
-  */
-
   // Create a new user - start by hashing the password
   bcrypt
     .genSalt(saltRounds)
@@ -64,6 +51,14 @@ router.post("/signup", isLoggedOut, (req, res) => {
       return User.create({ username, email, password: hashedPassword });
     })
     .then((user) => {
+      // After creating the user, check if they uploaded an artwork
+      if (req.body.artwork) {
+        return User.findByIdAndUpdate(user._id, { role: "artist" });
+      } else {
+        res.redirect("/auth/login");
+      }
+    })
+    .then(() => {
       res.redirect("/auth/login");
     })
     .catch((error) => {
