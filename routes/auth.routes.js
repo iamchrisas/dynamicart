@@ -16,12 +16,12 @@ const isLoggedOut = require("../middleware/isLoggedOut");
 const isLoggedIn = require("../middleware/isLoggedIn");
 
 // GET /auth/signup
-router.get("/signup", isLoggedOut, (req, res) => {
+router.get("/signup", isLoggedOut, (req, res, next) => {
   res.render("auth/signup");
 });
 
 // POST /auth/signup
-router.post("/signup", isLoggedOut, (req, res, next) => {
+router.post("/signup", isLoggedOut, async (req, res, next) => {
   const { username, email, password } = req.body;
 
   // Check that username, email, and password are provided
@@ -43,45 +43,45 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
   }
 
   // Create a new user - start by hashing the password
-  bcrypt
-    .genSalt(saltRounds)
-    .then((salt) => bcrypt.hash(password, salt))
-    .then((hashedPassword) => {
-      // Create a user and save it in the database
-      return User.create({ username, email, password: hashedPassword });
-    })
-    .then((user) => {
-      // After creating the user, check if they uploaded an artwork
-      if (req.body.artwork) {
-        return User.findByIdAndUpdate(user._id, { role: "artist" });
-      } else {
-        res.redirect("/auth/login");
-      }
-    })
-    .then(() => {
-      res.redirect("/auth/login");
-    })
-    .catch((error) => {
-      if (error instanceof mongoose.Error.ValidationError) {
-        res.status(500).render("auth/signup", { errorMessage: error.message });
-      } else if (error.code === 11000) {
-        res.status(500).render("auth/signup", {
-          errorMessage:
-            "Username and email need to be unique. Provide a valid username or email.",
-        });
-      } else {
-        next(error);
-      }
+  try {
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    // Create a user and save it in the database
+    const user = await User.create({
+      username,
+      email,
+      password: hashedPassword,
     });
+
+    // After creating the user, check if they uploaded an artwork
+    if (req.body.artwork) {
+      await User.findByIdAndUpdate(user._id, { role: "artist" });
+    } else {
+      res.redirect("/auth/login");
+    }
+
+    res.redirect("/auth/login");
+  } catch (error) {
+    if (error instanceof mongoose.Error.ValidationError) {
+      res.status(500).render("auth/signup", { errorMessage: error.message });
+    } else if (error.code === 11000) {
+      res.status(500).render("auth/signup", {
+        errorMessage:
+          "Username and email need to be unique. Provide a valid username or email.",
+      });
+    } else {
+      next(error);
+    }
+  }
 });
 
 // GET /auth/login
-router.get("/login", isLoggedOut, (req, res) => {
+router.get("/login", isLoggedOut, (req, res, next) => {
   res.render("auth/login");
 });
 
 // POST /auth/login
-router.post("/login", isLoggedOut, (req, res, next) => {
+router.post("/login", isLoggedOut, async (req, res, next) => {
   const { username, email, password } = req.body;
 
   // Check that username, email, and password are provided
@@ -103,41 +103,39 @@ router.post("/login", isLoggedOut, (req, res, next) => {
   }
 
   // Search the database for a user with the email submitted in the form
-  User.findOne({ email })
-    .then((user) => {
-      // If the user isn't found, send an error message that user provided wrong credentials
-      if (!user) {
-        res
-          .status(400)
-          .render("auth/login", { errorMessage: "Wrong credentials." });
-        return;
-      }
+  try {
+    const user = await User.findOne({ email });
 
-      // If user is found based on the username, check if the in putted password matches the one saved in the database
-      bcrypt
-        .compare(password, user.password)
-        .then((isSamePassword) => {
-          if (!isSamePassword) {
-            res
-              .status(400)
-              .render("auth/login", { errorMessage: "Wrong credentials." });
-            return;
-          }
+    // If the user isn't found, send an error message that user provided wrong credentials
+    if (!user) {
+      res
+        .status(400)
+        .render("auth/login", { errorMessage: "Wrong credentials." });
+      return;
+    }
 
-          // Add the user object to the session object
-          req.session.currentUser = user.toObject();
-          // Remove the password field
-          delete req.session.currentUser.password;
+    // If user is found based on the username, check if the in putted password matches the one saved in the database
+    const isSamePassword = await bcrypt.compare(password, user.password);
+    if (!isSamePassword) {
+      res
+        .status(400)
+        .render("auth/login", { errorMessage: "Wrong credentials." });
+      return;
+    }
 
-          res.redirect("/");
-        })
-        .catch((err) => next(err)); // In this case, we send error handling to the error handling middleware.
-    })
-    .catch((err) => next(err));
+    // Add the user object to the session object
+    req.session.currentUser = user.toObject();
+    // Remove the password field
+    delete req.session.currentUser.password;
+
+    res.redirect("/");
+  } catch (err) {
+    next(err); // In this case, we send error handling to the error handling middleware.
+  }
 });
 
 // GET /auth/logout
-router.get("/logout", isLoggedIn, (req, res) => {
+router.get("/logout", isLoggedIn, (req, res, next) => {
   req.session.destroy((err) => {
     if (err) {
       res.status(500).render("auth/logout", { errorMessage: err.message });

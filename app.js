@@ -15,6 +15,17 @@ const hbs = require("hbs");
 
 const app = express();
 
+app.use(
+    session({
+      secret: process.env.SESSION_SECRET || "superkey",
+      resave: false,
+      saveUninitialized: false,
+      store: MongoStore.create({
+        mongoUrl: MONGO_URI,
+      }),
+    })
+  );
+
 // ℹ️ This function is getting exported from the config folder. It runs most pieces of middleware
 require("./config")(app);
 
