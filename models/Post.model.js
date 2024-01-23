@@ -11,12 +11,7 @@ const postSchema = new Schema(
         ref: 'Hashtag'
       }
     ],
-    likes: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Like'
-      }
-    ],
+    likes: Number,
     comments: [
       {
         type: Schema.Types.ObjectId,

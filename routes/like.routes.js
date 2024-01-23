@@ -2,12 +2,16 @@ const express = require("express");
 const router = express.Router();
 const Like = require("../models/Like.model");
 
-// Create a new like
-router.post("/new", async (req, res, next) => {
-  const { user, post } = req.body;
+// Create a like
+router.post("/like", async (req, res, next) => {
   try {
-    const like = await Like.create({ user, post });
-    res.redirect("/likes");
+    const { userId, postId } = req.body;
+    await Like.create({ user: userId, post: postId });
+
+    // Increment the likes field in the Post document
+    await Post.findByIdAndUpdate(postId, { $inc: { likes: 1 } });
+
+    res.redirect("/posts");
   } catch (error) {
     next(error);
   }
@@ -24,10 +28,15 @@ router.get("/post/:postId", async (req, res, next) => {
 });
 
 // Delete a like
-router.delete("/:id", async (req, res, next) => {
+router.delete("/like/:id", async (req, res, next) => {
   try {
+    const like = await Like.findById(req.params.id);
     await Like.findByIdAndDelete(req.params.id);
-    res.redirect("/likes");
+
+    // Decrement the likes field in the Post document
+    await Post.findByIdAndUpdate(like.post, { $inc: { likes: -1 } });
+
+    res.redirect("/posts");
   } catch (error) {
     next(error);
   }

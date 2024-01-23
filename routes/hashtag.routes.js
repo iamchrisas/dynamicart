@@ -26,8 +26,8 @@ router.get("/", async (req, res, next) => {
 // Get a specific hashtag
 router.get("/:id", async (req, res, next) => {
   try {
-    const hashtag = await Hashtag.findById(req.params.id);
-    res.render("hashtag", { hashtag });
+    const hashtag = await Hashtag.findById(req.params.id).populate("posts");
+    res.render("hashtag-posts", { posts: hashtag.posts });
   } catch (error) {
     next(error);
   }
@@ -37,7 +37,11 @@ router.get("/:id", async (req, res, next) => {
 router.put("/:id", async (req, res, next) => {
   const { tag } = req.body;
   try {
-    const hashtag = await Hashtag.findByIdAndUpdate(req.params.id, { tag }, { new: true });
+    const hashtag = await Hashtag.findByIdAndUpdate(
+      req.params.id,
+      { tag },
+      { new: true }
+    );
     res.redirect("/hashtags");
   } catch (error) {
     next(error);
