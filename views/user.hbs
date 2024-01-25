@@ -1,11 +1,10 @@
-<h1>{{user.username}}</h1>
-<p>{{user.email}}</p>
+<h1>Posts of {{user.username}}</h1>
 
-<h2>Posts</h2>
-{{#each user.posts}}
+{{#each posts}}
   <div>
-    <h3>{{this.title}}</h3>
+    <h2>{{this.title}}</h2>
     <p>{{this.description}}</p>
-    <a href="/posts/{{this._id}}">Read more</a>
+    <img src="{{this.image}}" alt="{{this.title}}">
+    <p>Likes: {{this.likes}}</p>
   </div>
 {{/each}}

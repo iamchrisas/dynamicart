@@ -14,7 +14,7 @@ router.post("/new", async (req, res, next) => {
 });
 
 // Get all posts
-router.get("/posts", async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     const posts = await Post.find().populate("user");
     res.render("posts", { posts });
@@ -22,6 +22,17 @@ router.get("/posts", async (req, res, next) => {
     next(error);
   }
 });
+
+// Route to go to prefix - posts - user/id
+router.get("/user/:id", async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+    res.render("user", { user });
+  } catch (error) {
+    next(error);
+  }
+});
+
 
 // Get a specific post
 router.get("/:id", async (req, res, next) => {
@@ -73,3 +84,4 @@ router.get("/random", async (req, res, next) => {
 });
 
 module.exports = router;
+

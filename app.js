@@ -31,6 +31,7 @@ const authRoutes = require("./routes/auth.routes");
 app.use("/auth", authRoutes);
 
 // Import the routes
+
 const commentRoutes = require("./routes/comment.routes");
 const hashtagRoutes = require("./routes/hashtag.routes");
 const likeRoutes = require("./routes/like.routes");
@@ -40,9 +41,21 @@ const postRoutes = require("./routes/post.routes");
 app.use("/comments", commentRoutes);
 app.use("/hashtags", hashtagRoutes);
 app.use("/likes", likeRoutes);
-app.use("/posts", postRoutes);
+app.use("/posts", postRoutes)
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);
 
 module.exports = app;
+
+/*Change the link of the post to smth i already have
+app.js
+users /id
+
+route without typo
+404 = the route doesn 
+http://localhost:3000/user/65b02d8f47f0ba67fa7f1bb9
+
+/posts/user/id
+
+*/
