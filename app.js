@@ -32,19 +32,15 @@ app.use("/auth", authRoutes);
 
 // Import the routes
 const commentRoutes = require("./routes/comment.routes");
-const commissionRoutes = require("./routes/commission.routes");
 const hashtagRoutes = require("./routes/hashtag.routes");
 const likeRoutes = require("./routes/like.routes");
 const postRoutes = require("./routes/post.routes");
-const transactionRoutes = require("./routes/transaction.routes");
 
 // Use the routes
 app.use("/comments", commentRoutes);
-app.use("/commissions", commissionRoutes);
 app.use("/hashtags", hashtagRoutes);
 app.use("/likes", likeRoutes);
 app.use("/posts", postRoutes);
-app.use("/transactions", transactionRoutes);
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);
