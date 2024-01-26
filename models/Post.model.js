@@ -5,25 +5,16 @@ const postSchema = new Schema(
     title: String,
     description: String,
     image: String,
-    hashtags: [
+    tags: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'Hashtag'
-      }
-    ],
-    likes: Number,
-    comments: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Comment'
+        ref: 'Tag'
       }
     ],
     user: {
       type: Schema.Types.ObjectId,
       ref: 'User'
-    },
-    availableForSale: Boolean,
-    price: Number
+    }
   },
   {
     timestamps: true,

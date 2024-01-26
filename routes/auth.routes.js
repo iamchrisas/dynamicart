@@ -76,59 +76,46 @@ router.get("/login", isLoggedOut, (req, res, next) => {
   res.render("auth/login");
 });
 
+
 // POST /auth/login
 router.post("/login", isLoggedOut, async (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { email, password } = req.body;
 
-  // Check that username, email, and password are provided
-  if (username === "" || email === "" || password === "") {
+  // Check that email and password are provided
+  if (email === "" || password === "") {
     res.status(400).render("auth/login", {
-      errorMessage:
-        "All fields are mandatory. Please provide username, email and password.",
+      errorMessage: "Please provide both email and password.",
     });
-
     return;
   }
 
-  // Here we use the same logic as above
-  // - either length based parameters or we check the strength of a password
-  if (password.length < 6) {
-    return res.status(400).render("auth/login", {
-      errorMessage: "Your password needs to be at least 6 characters long.",
-    });
-  }
-
-  // Search the database for a user with the email submitted in the form
   try {
     const user = await User.findOne({ email });
 
-    // If the user isn't found, send an error message that user provided wrong credentials
     if (!user) {
-      res
-        .status(400)
-        .render("auth/login", { errorMessage: "Wrong credentials." });
+      res.status(400).render("auth/login", { errorMessage: "Wrong credentials." });
       return;
     }
 
-    // If user is found based on the username, check if the in putted password matches the one saved in the database
     const isSamePassword = await bcrypt.compare(password, user.password);
     if (!isSamePassword) {
-      res
-        .status(400)
-        .render("auth/login", { errorMessage: "Wrong credentials." });
+      res.status(400).render("auth/login", { errorMessage: "Wrong credentials." });
       return;
     }
 
-    // Add the user object to the session object
-    req.session.currentUser = user.toObject();
-    // Remove the password field
-    delete req.session.currentUser.password;
+    // Convert the user document to an object and remove the password
+    const userObject = user.toObject();
+    delete userObject.password;
+
+    // Add the user object to the session
+    req.session.currentUser = userObject;
 
     res.redirect("/");
   } catch (err) {
-    next(err); // In this case, we send error handling to the error handling middleware.
+    next(err);
   }
 });
+
 
 // GET /auth/logout
 router.get("/logout", isLoggedIn, (req, res, next) => {

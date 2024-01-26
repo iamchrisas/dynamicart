@@ -1,13 +1,9 @@
-<h1>Posts hbs</h1>
-
 {{#each posts}}
   <div>
     <h2>{{this.title}}</h2>
     <a href="/posts/user/{{this.user._id}}">{{this.user.username}}</a>
     <img src="{{this.image}}" alt="{{this.title}}" />
-    {{#if isLoggedIn}}
-      <button onclick="deletePost('{{this._id}}')">Delete Post</button>
-    {{/if}}
+    <button onclick="deletePost('{{this._id}}')">Delete Post</button>
   </div>
 {{/each}}
 <script>
@@ -28,4 +24,4 @@
       alert('Error: Unable to delete post');
     });
   }
-</script>
+</script></script>

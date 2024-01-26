@@ -24,10 +24,10 @@ const userSchema = new Schema(
       enum: ['user', 'artist'],
       default: 'user'
     },
-    commissions: [
+    posts: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'Commission'
+        ref: 'Post'
       }
     ]
   },

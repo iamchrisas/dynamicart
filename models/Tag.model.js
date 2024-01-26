@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 
-const hashtagSchema = new Schema(
+const tagSchema = new Schema(
   {
     text: String,
     posts: [
@@ -15,4 +15,4 @@ const hashtagSchema = new Schema(
   }
 );
 
-module.exports = model("Hashtag", hashtagSchema);
+module.exports = model("Tag", tagSchema);

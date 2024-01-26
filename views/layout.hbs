@@ -14,10 +14,17 @@
       <li><a href="/auth/login">Login</a></li>
       <li><a href="/auth/logout">Logout</a></li>
       <li><a href="/auth/signup">Signup</a></li>
-      <li><a href="/users">Users</a></li>
       <li><a href="/posts">Posts</a></li>
-      <li><a href="/hashtags">Hashtags</a></li>
+      <li><a href="/tags">Tags</a></li>
     </ul>
+
+    <form action="/posts/new" method="POST">
+  <input type="text" name="title" placeholder="Title">
+  <input type="text" name="image" placeholder="Image URL">
+  <!-- Add more input fields as needed -->
+  <button type="submit">Create Post</button>
+</form>
+
     {{{body}}}
 
     <script src="/js/script.js"></script>
