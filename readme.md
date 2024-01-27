@@ -41,4 +41,6 @@ A lightweight app to showcase your art
 
 ### App by Chris
 
+https://dynamicart-app.onrender.com
+
 https://github.com/iamchrisas
