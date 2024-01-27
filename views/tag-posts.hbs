@@ -1,31 +1,10 @@
-<h1>Tag posts hbs</h1>
+<h2>{{tag}}</h2>
 
 {{#each posts}}
   <div>
-    <h2>{{this.title}}</h2>
-    <a href="/posts/user/{{this.user._id}}">{{this.user.username}}</a>
-    <img src="{{this.image}}" alt="{{this.title}}" />
-    {{#if isLoggedIn}}
-      <button onclick="deletePost('{{this._id}}')">Delete Post</button>
-    {{/if}}
+    <h2><a href="/posts/user/{{user._id}}">{{user.username}}</a>
+      -
+      {{title}}</h2>
+    <img src="{{image}}" alt="{{title}}" />
   </div>
 {{/each}}
-<script>
-  function deletePost(postId) {
-    fetch('/posts/user/' + postId, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then(response => {
-      if (response.ok) {
-        window.location.href = '/posts';
-      } else {
-        alert('Error: Unable to delete post');
-      }
-    }).catch(error => {
-      console.error('Error:', error);
-      alert('Error: Unable to delete post');
-    });
-  }
-</script>

@@ -1,27 +1,7 @@
+<a href="/posts">Go Back</a>
 {{#each posts}}
   <div>
-    <h2>{{this.title}}</h2>
-    <a href="/posts/user/{{this.user._id}}">{{this.user.username}}</a>
+    <h2>{{this.user.username}} - {{this.title}} </h2>
     <img src="{{this.image}}" alt="{{this.title}}" />
-    <button onclick="deletePost('{{this._id}}')">Delete Post</button>
   </div>
 {{/each}}
-<script>
-  function deletePost(postId) {
-    fetch('/posts/user/' + postId, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then(response => {
-      if (response.ok) {
-        window.location.href = '/posts';
-      } else {
-        alert('Error: Unable to delete post');
-      }
-    }).catch(error => {
-      console.error('Error:', error);
-      alert('Error: Unable to delete post');
-    });
-  }
-</script></script>

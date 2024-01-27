@@ -1,31 +1,17 @@
-<h1>Posts hbs</h1>
+<h2>All Posts</h2>
 
+{{#if user}}
+  <h3><a href="/posts/create">Create New Post</a></h3>
+{{else}}
+  <p>You must be logged in to create a post.</p>
+  <p>Click on sign up to create an account.</p>
+{{/if}}
+<br />
 {{#each posts}}
   <div>
-    <h2>{{this.title}}</h2>
-    <a href="/posts/user/{{this.user._id}}">{{this.user.username}}</a>
+    <h3><a href="/posts/user/{{this.user._id}}">{{this.user.username}}</a>
+      -
+      <a href="/posts/{{this._id}}">{{this.title}}</a></h3>
     <img src="{{this.image}}" alt="{{this.title}}" />
-    {{#if isLoggedIn}}
-      <button onclick="deletePost('{{this._id}}')">Delete Post</button>
-    {{/if}}
   </div>
 {{/each}}
-<script>
-  function deletePost(postId) {
-    fetch('/posts/user/' + postId, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then(response => {
-      if (response.ok) {
-        window.location.href = '/posts';
-      } else {
-        alert('Error: Unable to delete post');
-      }
-    }).catch(error => {
-      console.error('Error:', error);
-      alert('Error: Unable to delete post');
-    });
-  }
-</script>

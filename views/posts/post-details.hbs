@@ -1,0 +1,11 @@
+<h2>{{post.user.username}} - {{post.title}}</h2>
+<a href="/posts">Go Back</a>
+<br>
+{{#if user}}
+<a href="/posts/{{post._id}}/edit">Edit Post</a>
+<form action="/posts/{{post._id}}/delete" method="post">
+  <button type="submit">Delete Post</button>
+</form>
+{{/if}}
+<br>
+<img src="{{post.image}}" alt="{{post.title}}" />

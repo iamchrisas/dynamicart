@@ -1,10 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const Tag = require("../models/Tag.model");
-const isLoggedIn = require("../middleware/isLoggedIn");
 
 // Create a new tag
-router.post("/new", isLoggedIn, async (req, res, next) => {
+router.post("/new", async (req, res, next) => {
   const { tag } = req.body;
   try {
     const newTag = await Tag.create({ tag });
@@ -24,7 +23,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-// Get a specific tag
+// Get a specific tag and the posts associated with it
 router.get("/:id", async (req, res, next) => {
   try {
     const tag = await Tag.findById(req.params.id).populate({
@@ -34,8 +33,9 @@ router.get("/:id", async (req, res, next) => {
         model: "User",
       },
     });
-    const isLoggedIn = req.session.currentUser ? true : false;
-    res.render("tag-posts", { posts: tag.posts, isLoggedIn });
+
+    // Pass the tag text and posts to the template
+    res.render("tag-posts", { tag: tag.text, posts: tag.posts });
   } catch (error) {
     next(error);
   }
