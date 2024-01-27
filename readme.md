@@ -6,22 +6,37 @@ A lightweight app to showcase your art
 
 - You can
   - create an account, login, logout
-  - view, create, update, delete a post
+  - view, create, update, delete posts
   - view, create, update, delete tags
-  - view the all of the posts of a user
+  - view a user's posts
 
+ User ==> Posts => Tags
 
- Entity-Relationship Diagram (ERD)
+                    +---------+ 
+                    |  User   |
+                    +---------+
+                    | UserID  |
+                    | Username|
+                    | Email   |
+                    | Password|
+                    +---------+
 
-+---------+           +---------+           +---------+
-|  User   |           |  Post   |           |  Tag    |
-+---------+           +---------+           +---------+
-| UserID  |1        * | PostID  |1        * | TagID   |
-| Username|<----------| UserID  |           | Name    |
-| Email   |           | Title   |<----------| PostID  |
-| Password|           | Image   |           | ...     |
-| ...     |           | ...     |           +---------+
-+---------+           +---------+
+                    +---------+
+                    |  Post   |
+                    +---------+
+                    | PostID  |
+                    | UserID  |
+                    | Title   |
+                    | Content |
+                    +---------+
+
+                    +---------+
+                    |  Tag    |
+                    +---------+
+                    | TagID   |
+                    | Name    |
+                    | PostID  |
+                    +---------+
 
 
 ### App by Chris
