@@ -1,6 +1,9 @@
 <h1>All Tags</h1>
 {{#each tags}}
-  <div>
-    <p><a href="/tags/{{this._id}}">{{this.text}}</a></p>
-  </div>
+  <ul class="list-group">
+    <li class="list-group-item"><a
+        href="/tags/{{this._id}}"
+      >{{this.text}}
+      </a></li>
+  </ul>
 {{/each}}

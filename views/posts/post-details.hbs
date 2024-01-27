@@ -1,11 +1,16 @@
-<h2>{{post.user.username}} - {{post.title}}</h2>
-<a href="/posts">Go Back</a>
+<div class="card">
+  <div class="card-body">
+    <h2 class="card-title">{{post.user.username}} - {{post.title}}</h2>
+    <img src="{{post.image}}" class="card-img-bottom" alt="{{post.title}}" />
+    <br />
+  </div>
+</div>
+<br />
+<a href="/posts/{{post._id}}/edit" class="btn btn-primary">Edit Post</a>
 <br>
-{{#if user}}
-<a href="/posts/{{post._id}}/edit">Edit Post</a>
+<br>
 <form action="/posts/{{post._id}}/delete" method="post">
-  <button type="submit">Delete Post</button>
+  <button type="submit" class="btn btn-danger">Delete Post</button>
 </form>
-{{/if}}
-<br>
-<img src="{{post.image}}" alt="{{post.title}}" />
+
+<a href="/posts" class="btn btn-secondary">Go Back</a>

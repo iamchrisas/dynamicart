@@ -63,7 +63,7 @@ router.get("/:id", async (req, res, next) => {
 });
 
 // POST route to delete a specific post
-router.post("/:id/delete", async (req, res, next) => {
+router.post("/:id/delete", isLoggedIn, async (req, res, next) => {
   try {
     await Post.findByIdAndDelete(req.params.id);
     res.redirect("/posts");
@@ -73,7 +73,7 @@ router.post("/:id/delete", async (req, res, next) => {
 });
 
 // GET route to show the edit form for a specific post
-router.get("/:id/edit", async (req, res, next) => {
+router.get("/:id/edit", isLoggedIn, async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id).populate("tags");
     res.render("posts/edit-post", { post });
@@ -83,7 +83,7 @@ router.get("/:id/edit", async (req, res, next) => {
 });
 
 // POST route to update a specific post
-router.post("/:id/edit", async (req, res, next) => {
+router.post("/:id/edit", isLoggedIn, async (req, res, next) => {
   const { title, image, tags: rawTags } = req.body;
 
   // Normalize tags: split by commas if it's a string, or use as-is if it's already an array

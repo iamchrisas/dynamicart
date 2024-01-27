@@ -1,17 +1,19 @@
-<h2>All Posts</h2>
+<br>
+<h2 class="h4">All Posts</h2>
+<br>
+<h3><a href="/posts/create" type="button" class="btn btn-primary">Create Post</a></h3>
 
-{{#if user}}
-  <h3><a href="/posts/create">Create New Post</a></h3>
-{{else}}
-  <p>You must be logged in to create a post.</p>
-  <p>Click on sign up to create an account.</p>
-{{/if}}
 <br />
 {{#each posts}}
-  <div>
-    <h3><a href="/posts/user/{{this.user._id}}">{{this.user.username}}</a>
-      -
-      <a href="/posts/{{this._id}}">{{this.title}}</a></h3>
-    <img src="{{this.image}}" alt="{{this.title}}" />
+  <div class="card">
+    <div class="card-body">
+      <h3 class="card-title"><a
+          href="/posts/user/{{this.user._id}}"
+        >{{this.user.username}}</a>
+        -
+        <a class="card-text" href="/posts/{{this._id}}">{{this.title}}</a></h3>
+      <img src="{{this.image}}" class="card-img-bottom" alt="{{this.title}}" />
+    </div>
   </div>
+  <br />
 {{/each}}
